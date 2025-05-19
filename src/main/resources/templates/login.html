@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("https://st2.depositphotos.com/1427101/7225/i/380/depositphotos_72250023-stock-photo-red-code.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+        .form-container {
+            position: relative;
+            z-index: 1;
+            background-color: #ffffffcc;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            width: 400px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #555;
+            font-weight: 600;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        button {
+            width: 100%;
+            padding: 0.7rem;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+        }
+        .show-password {
+            margin-top: -0.8rem;
+            margin-bottom: 1rem;
+            font-weight: normal;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        .redirect-link {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+        .redirect-link a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .redirect-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="form-container">
+        <h2>Login</h2>
+
+        <form th:action="@{/login}" th:object="${loginRequest}" method="post">
+            <div>
+                <label for="username">Username:</label>
+                <input id="username" type="text" th:field="*{username}" required />
+            </div>
+            <div>
+                <label for="password">Password:</label>
+                <input id="password" type="password" th:field="*{password}" required />
+                <label class="show-password">
+                    <input type="checkbox" onclick="togglePassword()"> Show Password
+                </label>
+            </div>
+            <div>
+                <button type="submit">Login</button>
+            </div>
+        </form>
+
+        <div th:if="${loginError}" class="error-message">
+            <p th:text="${loginError}">Invalid username or password</p>
+        </div>
+
+        <p class="redirect-link">
+            New user? <a th:href="@{/register}">Register here</a>
+        </p>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        }
+    </script>
+</body>
+</html>
+    

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Edit Issue</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("https://st2.depositphotos.com/1427101/7225/i/380/depositphotos_72250023-stock-photo-red-code.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      position: relative;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      max-width: 600px;
+      margin: 3rem auto;
+      padding: 1rem;
+      z-index: 1;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      padding: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group span {
+      display: block;
+      padding: 0.5rem 0;
+    }
+
+    .form-group select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .btn-primary {
+      background: #007bff;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: #0056b3;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      color: #fff;
+      margin-left: 0.5rem;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="overlay"></div>
+
+  <div class="container">
+    <div class="card">
+      <h2>Edit Issue Status</h2>
+      <form th:action="@{'/issues/update/' + ${issue.id}}" method="post">
+        <div class="form-group">
+          <label>ID:</label>
+          <span th:text="${issue.id}"></span>
+        </div>
+        <div class="form-group">
+          <label>Title:</label>
+          <span th:text="${issue.title}"></span>
+        </div>
+        <div class="form-group">
+          <label for="status">Status:</label>
+          <select id="status" name="status">
+            <option th:each="s : ${statuses}"
+                    th:value="${s}"
+                    th:text="${s}"
+                    th:selected="${s} == ${issue.status}">
+            </option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a th:href="@{/issues}" class="btn btn-secondary">Back</a>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

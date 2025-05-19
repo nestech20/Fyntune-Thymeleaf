@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Issues</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url("https://st2.depositphotos.com/1427101/7225/i/380/depositphotos_72250023-stock-photo-red-code.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
+      overflow: auto;
+    }
+    /* Overlay to darken the background image */
+    .overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 0;
+    }
+    /* Container centered with z-index above overlay */
+    .container {
+      position: relative;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+      z-index: 1;
+    }
+    /* Card with slight transparency and stronger shadow */
+    .card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      padding: 2rem;
+    }
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+      text-align: center;
+    }
+    form.filter-form {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    label {
+      font-weight: 600;
+      color: #555;
+    }
+    select#statusFilter {
+      padding: 0.4rem 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+      cursor: pointer;
+      min-width: 150px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1.1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      border: none;
+      text-align: center;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .btn-primary {
+		background: rgb(108, 117, 125);
+		color: rgb(0, 0, 0);
+    }
+    .btn-primary:hover {
+		background: rgb(192, 192, 192);
+    }
+    .btn-secondary {
+      background: rgb(108, 117, 125);
+      color: rgb(0, 0, 0);
+    }
+    .btn-secondary:hover {
+      background: rgb(192, 192, 192);
+    }
+    .btn-danger {
+      background: #dc3545;
+      color: rgb(0, 0, 0);
+    }
+    .btn-danger:hover {
+      background: rgb(255, 128, 128);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 0;
+      table-layout: fixed;
+    }
+    thead {
+      background-color: #007bff;
+      color: #fff;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: middle;
+      word-wrap: break-word;
+    }
+    form.inline {
+      display: inline;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="card">
+      <h2>Issue Tracker</h2>
+
+      <form method="get" th:action="@{/issues}" class="filter-form">
+        <label for="statusFilter">Filter by Status:</label>
+        <select id="statusFilter" name="status" onchange="this.form.submit()">
+          <option th:if="${selectedStatus == null}" value="" selected>All</option>
+          <option th:each="s: ${statuses}"
+                  th:value="${s}"
+                  th:text="${s}"
+                  th:selected="${s} == ${selectedStatus}">
+          </option>
+        </select>
+        <div class="btn-group">
+          <a th:href="@{/issues/new}" class="btn btn-primary">New Issue</a>
+        </div>
+      </form>
+
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Title</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+          <tr th:each="issue : ${issues}">
+            <td th:text="${issue.id}">1</td>
+            <td th:text="${issue.title}">Sample</td>
+            <td th:text="${issue.status}">OPEN</td>
+            <td>
+              <a th:href="@{'/issues/edit/' + ${issue.id}}" class="btn btn-secondary">Edit</a>
+              <form th:action="@{'/issues/delete/' + ${issue.id}}" method="post" class="inline">
+                <button type="submit" class="btn btn-danger"
+                        onclick="return confirm('Delete this issue?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
