@@ -55,8 +55,9 @@ public class IssueController {
 
     // Handle status update
     @PostMapping("/update/{id}")
-    public String updateIssue(@PathVariable Long id, @RequestParam IssueStatus status) {
-        userService.updateIssueStatus(id, status);
+    public String updateIssue(@PathVariable Long id, @ModelAttribute Issue issue) {
+        issue.setId(id); // Ensure the ID is set
+        userService.updateIssue(issue);
         return "redirect:/issues";
     }
 

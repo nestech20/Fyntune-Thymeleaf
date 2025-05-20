@@ -65,18 +65,30 @@ public class UserService {
 	    }
 
 	
-	    public Issue updateIssueStatus(Long id, IssueStatus newStatus) {
-	        Optional<Issue> opt = issueRepository.findById(id);
-	        if (opt.isPresent()) {
-	            Issue issue = opt.get();
-	            issue.setStatus(newStatus);
-	            return issueRepository.save(issue);
+	    public void updateIssue(Issue updatedIssue) {
+	        Optional<Issue> existingIssueOpt = issueRepository.findById(updatedIssue.getId());
+	        if (existingIssueOpt.isPresent()) {
+	            Issue existingIssue = existingIssueOpt.get();
+	            existingIssue.setTitle(updatedIssue.getTitle());
+	            existingIssue.setDescription(updatedIssue.getDescription());
+	            existingIssue.setStatus(updatedIssue.getStatus());
+	            issueRepository.save(existingIssue);
+	        } else {
+	            throw new IllegalArgumentException("Issue not found with ID: " + updatedIssue.getId());
 	        }
-	        throw new IllegalArgumentException("Issue not found with id: " + id);
 	    }
+
 
 	 
 	    public void deleteIssue(Long id) {
-	        issueRepository.deleteById(id);
+	        Optional<Issue> opt = issueRepository.findById(id);
+	        if (opt.isPresent()) {
+	            Issue issue = opt.get();
+	            issue.setStatus(IssueStatus.CLOSED);
+	            issueRepository.save(issue);
+	        } else {
+	            throw new IllegalArgumentException("Issue not found with id: " + id);
+	        }
 	    }
+
 }
